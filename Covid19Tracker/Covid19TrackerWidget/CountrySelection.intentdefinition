@@ -83,6 +83,8 @@
 		<dict>
 			<key>INIntentCategory</key>
 			<string>information</string>
+			<key>INIntentDescription</key>
+			<string>Select Country</string>
 			<key>INIntentDescriptionID</key>
 			<string>chrtrm</string>
 			<key>INIntentEligibleForWidgets</key>

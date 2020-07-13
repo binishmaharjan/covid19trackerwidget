@@ -13,6 +13,7 @@ struct Covid19CountryStatusIntentProvider: IntentTimelineProvider {
     typealias Entry = Covid19CountryStatusEntry
     typealias Intent = CountrySelectIntent
     
+    ///　Intentに設定されたOptionを文字列に変換するhelper method
     func country(for configuration: CountrySelectIntent) -> String {
         switch configuration.country {
         
