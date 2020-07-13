@@ -22,8 +22,9 @@
 	<true/>
 	<key>NSUserActivityTypes</key>
 	<array>
-		<string>ConfigurationIntent</string>
 		<string>CountryIntentIntent</string>
+		<string>CountrySelectIntent</string>
+		<string>MyOptionsIntent</string>
 		<string>SelectCountryIntent</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
