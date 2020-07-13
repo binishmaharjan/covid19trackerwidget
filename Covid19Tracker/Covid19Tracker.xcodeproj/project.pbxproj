@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		642CAEE924BAF04500194830 /* Covid19TrackerWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 642CAEE824BAF04500194830 /* Covid19TrackerWidget.intentdefinition */; };
-		642CAEEA24BAF04500194830 /* Covid19TrackerWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 642CAEE824BAF04500194830 /* Covid19TrackerWidget.intentdefinition */; };
 		642D347824B7F38B009348C6 /* Covid19TrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642D346524B7F38A009348C6 /* Covid19TrackerApp.swift */; };
 		642D347924B7F38B009348C6 /* Covid19TrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642D346524B7F38A009348C6 /* Covid19TrackerApp.swift */; };
 		642D347A24B7F38B009348C6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642D346624B7F38A009348C6 /* ContentView.swift */; };
@@ -28,6 +26,8 @@
 		642D34AA24B811BD009348C6 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642D34A824B811BD009348C6 /* String+Extension.swift */; };
 		642D34B024B81410009348C6 /* Covid19DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642D34AF24B81410009348C6 /* Covid19DataLoader.swift */; };
 		642D34B124B81410009348C6 /* Covid19DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642D34AF24B81410009348C6 /* Covid19DataLoader.swift */; };
+		643ECD4A24BC2699000B1277 /* CountrySelection.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 643ECD4924BC2699000B1277 /* CountrySelection.intentdefinition */; };
+		643ECD4B24BC2699000B1277 /* CountrySelection.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 643ECD4924BC2699000B1277 /* CountrySelection.intentdefinition */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,7 +56,6 @@
 
 /* Begin PBXFileReference section */
 		642CAEA024BAED8500194830 /* Covid19Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Covid19Tracker.entitlements; sourceTree = "<group>"; };
-		642CAEE824BAF04500194830 /* Covid19TrackerWidget.intentdefinition */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.intentdefinition; path = Covid19TrackerWidget.intentdefinition; sourceTree = "<group>"; };
 		642D346524B7F38A009348C6 /* Covid19TrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Covid19TrackerApp.swift; sourceTree = "<group>"; };
 		642D346624B7F38A009348C6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		642D346724B7F38B009348C6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -75,6 +74,7 @@
 		642D34A524B8115D009348C6 /* Covid19WidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Covid19WidgetView.swift; sourceTree = "<group>"; };
 		642D34A824B811BD009348C6 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		642D34AF24B81410009348C6 /* Covid19DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Covid19DataLoader.swift; sourceTree = "<group>"; };
+		643ECD4924BC2699000B1277 /* CountrySelection.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = CountrySelection.intentdefinition; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,9 +171,9 @@
 				642D34AC24B813E5009348C6 /* Entities */,
 				642D34AB24B813DD009348C6 /* Views */,
 				642D349124B7F3EE009348C6 /* Covid19TrackerWidget.swift */,
-				642CAEE824BAF04500194830 /* Covid19TrackerWidget.intentdefinition */,
 				642D349424B7F3EF009348C6 /* Assets.xcassets */,
 				642D349624B7F3EF009348C6 /* Info.plist */,
+				643ECD4924BC2699000B1277 /* CountrySelection.intentdefinition */,
 			);
 			path = Covid19TrackerWidget;
 			sourceTree = "<group>";
@@ -338,10 +338,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				642CAEE924BAF04500194830 /* Covid19TrackerWidget.intentdefinition in Sources */,
 				642D34A624B8115D009348C6 /* Covid19WidgetView.swift in Sources */,
 				642D34A324B7F41E009348C6 /* Covid19CountryStatus.swift in Sources */,
 				642D34B024B81410009348C6 /* Covid19DataLoader.swift in Sources */,
+				643ECD4A24BC2699000B1277 /* CountrySelection.intentdefinition in Sources */,
 				642D347A24B7F38B009348C6 /* ContentView.swift in Sources */,
 				642D34A924B811BD009348C6 /* String+Extension.swift in Sources */,
 				642D347824B7F38B009348C6 /* Covid19TrackerApp.swift in Sources */,
@@ -364,7 +364,7 @@
 				642D34AA24B811BD009348C6 /* String+Extension.swift in Sources */,
 				642D34A724B81164009348C6 /* Covid19WidgetView.swift in Sources */,
 				642D34B124B81410009348C6 /* Covid19DataLoader.swift in Sources */,
-				642CAEEA24BAF04500194830 /* Covid19TrackerWidget.intentdefinition in Sources */,
+				643ECD4B24BC2699000B1277 /* CountrySelection.intentdefinition in Sources */,
 				642D349224B7F3EE009348C6 /* Covid19TrackerWidget.swift in Sources */,
 				642D34A424B7F522009348C6 /* Covid19CountryStatus.swift in Sources */,
 			);
