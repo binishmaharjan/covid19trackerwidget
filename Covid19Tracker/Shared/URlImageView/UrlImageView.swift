@@ -16,15 +16,17 @@ struct UrlImageView: View {
     
     var body: some View {
         ZStack {
-            Image(systemName: "hourglass")
-                .frame(width: 150, height: 150)
-                .imageScale(.large)
-                .spinning()
-            
             if let uiimage = urlImageModel.image {
                 Image(uiImage: uiimage)
                     .resizable()
-                    
+                    .onTapGesture {
+                        // save uiimage as file
+                    }
+            } else {
+                Image(systemName: "hourglass")
+                    .frame(width: 150, height: 150)
+                    .imageScale(.large)
+                    .spinning()
             }
         }
         .clipShape(Rectangle())
