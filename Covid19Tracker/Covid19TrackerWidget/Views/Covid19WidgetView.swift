@@ -17,7 +17,7 @@ struct CountryStatusWidgetView: View {
                 .resizable()
             
             VStack() {
-                TitleView(country: status.countries.first!.country,
+                TitleView(title: status.countries.first!.country,
                           lastUpdatedDate: status.lastUpdated.displayDate)
                 
                 InfoRowView(infos: [
@@ -42,7 +42,7 @@ struct CountryStatusWidgetMediumView: View {
                 .resizable()
             
             VStack() {
-                TitleView(country: status.countries.first!.country,
+                TitleView(title: status.countries.first!.country,
                           lastUpdatedDate: status.lastUpdated.displayDate)
                 
                 HStack{
@@ -74,12 +74,12 @@ struct CountryStatusWidgetMediumView: View {
 
 // MARK: Widget Title
 struct TitleView: View {
-    var country: String
+    var title: String
     var lastUpdatedDate: String
     
     var body: some View {
         VStack {
-            Text(country)
+            Text(title)
                 .font(.headline)
             
             TrailingText(string: lastUpdatedDate)

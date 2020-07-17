@@ -112,13 +112,13 @@ struct Covid19CountryStatusEntryView: View {
         switch family {
         case .systemSmall:
             CountryStatusWidgetView(status: entry.status)
+                .widgetURL(URL(string: entry.self.status.countries.first?.country ?? "invalid country"))
         default:
             CountryStatusWidgetMediumView(status: entry.status)
         }
     }
 }
 
-@main
 struct Covid19TrackerWidget: Widget {
     private let kind: String = "Covid19TrackerWidget"
 
@@ -163,3 +163,13 @@ struct Covid19TrackerWidget_Previews: PreviewProvider {
 }
 
 
+@main
+struct Covid19WidgetBundle: WidgetBundle {
+    
+    @WidgetBundleBuilder
+    var body: some Widget {
+        Covid19TrackerWidget()
+        Covid19GeneralStatsWidget()
+    }
+    
+}

@@ -1,5 +1,7 @@
 ## Widgetを作るまとめ
 
+今回は、新型コロナの感染情報を表示する簡単なWidgetを作成してみたいと思います。まずは、国の感染情報を表示できるようにします。
+
 AppにWidgetを追加すするために新しいTargetを追加する必要あります。
 
 追加方法：
@@ -108,6 +110,7 @@ WidgetConfigurationは二種類あります
             completion(entry)
         }
     ```
+    ![widgetsnapshot](/Users/maharjanbinish/Desktop/iOS 14 Widgets/widgetsnapshot.png)
 
   - timeline(with context:completion)
 
@@ -123,6 +126,10 @@ WidgetConfigurationは二種類あります
     3. .after(Date):  指定の時間後
 
     （注意：新しTimeline取得後、Widgetにすぐに反映されるとは限りません。多少時間かかります。反映されるまでの時間は、ユーザーがどれだけWidgetを見ているかが大きく影響します。）
+
+    ​
+
+    timeline()では、Widgetに表示する本当のデータを処理しますので通信などもこちらでやっています。
 
   ```swift
   func timeline(with context: Context, completion: @escaping (Timeline<Covid19CountryStatusEntry>) -> ()) {
@@ -222,20 +229,45 @@ public var body: some WidgetConfiguration {
 ユーザがWidgetをタップした時、WidgetKitがアプリを開き、指定のURLを渡すことができます。URLの指定はViewに.widgetURL modifier利用することでできます。
 
 ```swift
-struct EmojiRangerWidgetEntryView: View {
-    ...省略...
+struct Covid19CountryStatusEntryView: View {
+    
+    @Environment(\.widgetFamily) var family: WidgetFamily
+    var entry: Covid19CountryStatusProvider.Entry
+    
     @ViewBuilder
-    var body: some View {
+    var body: some View{
         switch family {
         case .systemSmall:
-           AvatarView(entry.character)
-          		.widgetURL(entry.url) // Widgetタップ時、指定の画面を開きます
-        ...省略...
+            CountryStatusWidgetView(status: entry.status)
+          	.widgetURL(URL(string: entry.self.status.countries.first?.country ?? "invalid country"))
+        default:
+            CountryStatusWidgetMediumView(status: entry.status)
+        }
     }
 }
 ```
 
+今はアプリ自体は何も表示されていませんので、URLとして現在表示している国の名前を渡して、それを表示しています。
 
+```Swift
+//アプリ側のコード
+struct ContentView: View {
+    
+    @State var displayText: String = "Hello World"
+    var body: some View {
+        Text(displayText)
+            .onOpenURL { url in
+            self.displayText = url.absoluteString
+        }
+    }
+}
+```
+
+SmallWidgetをタップし、アプリを開くと以下のように国の名前が表示されます。
+
+![widgettap](/Users/maharjanbinish/Desktop/iOS 14 Widgets/widgettap.png)
+
+WidgetUrlを提供しない場合、タップされたら単にアプリ開きます。
 
 #### Adding UserConfigurable Properties(ユーザー設定可能なプロパティ)
 
@@ -245,8 +277,8 @@ struct EmojiRangerWidgetEntryView: View {
 具体的には以下のように変更します。
 
 -  新しSiriKit Intent Definitionを追加し、プロパティの追加
-- IntentTimelineProviderを準拠指定いるオブジェクトを作る
-- WidgetのConfigirationをIntentConfigurationに変更する
+-  IntentTimelineProviderを準拠指定いるオブジェクトを作る
+-  WidgetのConfigirationをIntentConfigurationに変更する
 
 ##### 新しSiriKit Intent Definitionを追加し、プロパティの追加
 
@@ -358,6 +390,31 @@ WidgetのConfigirationをIntentConfigurationにします。
 ![userconfigurableproperty](userconfigurableproperty.png)
 
 そして、`Edit Wiget` を選択すると国が選択できるようになります。
+
+
+
+#### 複数の種類のWidgetをサポート
+
+ 一つのアプリの複数種類のWidgetを作成することができます。複数種類のWidgetのためにはWidgetBundleを作成し、@mainをこちらに移動します。
+
+もう一つ、コロナの全体情報を見れるWidget(Covid19GeneralStatsWidget)を作成しました。WidgetBundleにWidgetConfigurationを追加することだけで複数のWidgetをサポートできます
+
+```Swift
+@main
+struct Covid19WidgetBundle: WidgetBundle {
+    
+    @WidgetBundleBuilder
+    var body: some Widget {
+        Covid19TrackerWidget()
+        Covid19GeneralStatsWidget()
+    }
+    
+}
+```
+
+こちらでWidgetを選択するときスワイプで追加Widgetを選択できるようになります。
+
+![multiplewidget](/Users/maharjanbinish/Desktop/iOS 14 Widgets/multiplewidget.png)
 
 #### Preview
 

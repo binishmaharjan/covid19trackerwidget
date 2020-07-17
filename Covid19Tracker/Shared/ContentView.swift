@@ -8,8 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State var displayText: String = "Hello World"
+    @State var searchImagesURLStrings: [String] = []
+    
     var body: some View {
-        Text("Hello, world!").padding()
+        NavigationView {
+            Text(displayText)
+                .onOpenURL { url in
+                    self.displayText = url.absoluteString
+                }
+                .navigationBarTitle(Text("Home"), displayMode: .inline)
+                .navigationBarItems(trailing: createSetBackgroundImageButton())
+        }
+    }
+    
+    private func createSetBackgroundImageButton() -> some View {
+        NavigationLink(destination: SearchImageView()) { Image(systemName: "gear")}
     }
 }
 

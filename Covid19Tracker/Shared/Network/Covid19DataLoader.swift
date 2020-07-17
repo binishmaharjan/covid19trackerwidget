@@ -43,4 +43,22 @@ struct Covid19DataLoader {
         
         task.resume()
     }
+    
+    static func fetchGeneralStats(completion: @escaping (Result<Covid19GeneralStats, Error>) -> Void) {
+        let url = URL(string: "https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats")!
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard error == nil else {
+                completion(.failure(error!))
+                return
+            }
+            do {
+                let countryData = try JSONDecoder().decode(Covid19GeneralStats.self, from: data!)
+                completion(.success(countryData))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+        
+        task.resume()
+    }
 }
