@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UIKit
 
 class UrlImageModel: ObservableObject {
     @Published var image: UIImage?

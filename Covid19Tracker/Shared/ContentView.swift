@@ -12,14 +12,28 @@ struct ContentView: View {
     @State var displayText: String = "Hello World"
     @State var searchImagesURLStrings: [String] = []
     
+    var bgImage: UIImage? {
+        let filePath = FileManager.sharedContainerURL()
+            .appendingPathComponent(FileManager.bgFileName)
+        do {
+            let data = try Data(contentsOf: filePath)
+            let uiimage = UIImage(data: data)
+            return uiimage
+        } catch {
+            return nil
+        }
+    }
+    
     var body: some View {
         NavigationView {
-            Text(displayText)
-                .onOpenURL { url in
-                    self.displayText = url.absoluteString
-                }
-                .navigationBarTitle(Text("Home"), displayMode: .inline)
-                .navigationBarItems(trailing: createSetBackgroundImageButton())
+            ZStack {
+                Text(displayText)
+                    .onOpenURL { url in
+                        self.displayText = url.absoluteString
+                    }
+            }
+            .navigationBarTitle(Text("Home"), displayMode: .inline)
+            .navigationBarItems(trailing: createSetBackgroundImageButton())
         }
     }
     

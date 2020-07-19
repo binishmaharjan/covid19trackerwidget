@@ -11,58 +11,73 @@ import WidgetKit
 struct Covid19GeneralStatsView: View {
     
     var stats: Covid19GeneralStats
+    var bgImage: UIImage? {
+        let filePath = FileManager.sharedContainerURL().appendingPathComponent(FileManager.bgFileName)
+        do {
+            let data = try Data(contentsOf: filePath)
+            let uiimage = UIImage(data: data)
+            return uiimage
+        } catch {
+            return nil
+        }
+    }
     
     var body: some View {
-        VStack {
-            TitleView(title: "Covid 19 General Stats",
-                      lastUpdatedDate: stats.lastUpdate.displayDate)
+        ZStack {
+            Image(uiImage: bgImage!)
+                .resizable()
             
-            HStack {
-                VStack {
+            VStack {
+                TitleView(title: "Covid 19 General Stats",
+                          lastUpdatedDate: stats.lastUpdate.displayDate)
+                
+                HStack {
                     VStack {
-                        LeadingText(string: "Total Cases:").padding(.bottom, 3)
-                        LeadingText(string: "Currently Infected:").padding(.bottom, 3)
-                        LeadingText(string: "Mild Condition:").padding(.bottom, 3)
-                        LeadingText(string: "Critical Condition:").padding(.bottom, 3)
-                        LeadingText(string: "Death Cases:").padding(.bottom, 3)
-                        LeadingText(string: "Recovered Cases:").padding(.bottom, 3)
+                        VStack {
+                            LeadingText(string: "Total Cases:").padding(.bottom, 3)
+                            LeadingText(string: "Currently Infected:").padding(.bottom, 3)
+                            LeadingText(string: "Mild Condition:").padding(.bottom, 3)
+                            LeadingText(string: "Critical Condition:").padding(.bottom, 3)
+                            LeadingText(string: "Death Cases:").padding(.bottom, 3)
+                            LeadingText(string: "Recovered Cases:").padding(.bottom, 3)
+                        }
+                        
+                        VStack {
+                            LeadingText(string: "Recovered Percentage:").padding(.bottom, 3)
+                            LeadingText(string: "Death Percentage:").padding(.bottom, 3)
+                            LeadingText(string: "MildPercentage:").padding(.bottom, 3)
+                            LeadingText(string: "Critical Percentage:").padding(.bottom, 3)
+                            LeadingText(string: "Death Rate:").padding(.bottom, 3)
+                        }
                     }
                     
+                    Spacer().frame(width: 16)
+                    
                     VStack {
-                        LeadingText(string: "Recovered Percentage:").padding(.bottom, 3)
-                        LeadingText(string: "Death Percentage:").padding(.bottom, 3)
-                        LeadingText(string: "MildPercentage:").padding(.bottom, 3)
-                        LeadingText(string: "Critical Percentage:").padding(.bottom, 3)
-                        LeadingText(string: "Death Rate:").padding(.bottom, 3)
+                        VStack {
+                            LeadingText(string: stats.totalCases).padding(.bottom, 3)
+                            LeadingText(string: stats.currentlyInfected).padding(.bottom, 3)
+                            LeadingText(string: stats.mildConditionActiveCases).padding(.bottom, 3)
+                            LeadingText(string: stats.criticalConditionActiveCases).padding(.bottom, 3)
+                            LeadingText(string: stats.deathClosedCases).padding(.bottom, 3)
+                            LeadingText(string: stats.recoveredClosedCases).padding(.bottom, 3)
+                        }
+                        
+                        VStack {
+                            LeadingText(string: stats.recoveryCases).padding(.bottom, 3)
+                            LeadingText(string: stats.closedCasesDeathPercentage).padding(.bottom, 3)
+                            LeadingText(string: stats.activeCasesMildPercentage).padding(.bottom, 3)
+                            LeadingText(string: stats.activeCasesCriticalPercentage).padding(.bottom, 3)
+                            LeadingText(string: stats.generalDeathRate).padding(.bottom, 3)
+                        }
                     }
                 }
                 
-                Spacer().frame(width: 16)
                 
-                VStack {
-                    VStack {
-                        LeadingText(string: stats.totalCases).padding(.bottom, 3)
-                        LeadingText(string: stats.currentlyInfected).padding(.bottom, 3)
-                        LeadingText(string: stats.mildConditionActiveCases).padding(.bottom, 3)
-                        LeadingText(string: stats.criticalConditionActiveCases).padding(.bottom, 3)
-                        LeadingText(string: stats.deathClosedCases).padding(.bottom, 3)
-                        LeadingText(string: stats.recoveredClosedCases).padding(.bottom, 3)
-                    }
-                    
-                    VStack {
-                        LeadingText(string: stats.recoveryCases).padding(.bottom, 3)
-                        LeadingText(string: stats.closedCasesDeathPercentage).padding(.bottom, 3)
-                        LeadingText(string: stats.activeCasesMildPercentage).padding(.bottom, 3)
-                        LeadingText(string: stats.activeCasesCriticalPercentage).padding(.bottom, 3)
-                        LeadingText(string: stats.generalDeathRate).padding(.bottom, 3)
-                    }
-                }
+                Spacer()
             }
-            
-            
-            Spacer()
+            .padding()
         }
-        .padding()
     }
 }
 

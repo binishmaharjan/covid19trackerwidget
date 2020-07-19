@@ -20,7 +20,12 @@ struct UrlImageView: View {
                 Image(uiImage: uiimage)
                     .resizable()
                     .onTapGesture {
-                        // save uiimage as file
+                        if let data = uiimage.pngData() {
+                            let filename = FileManager.sharedContainerURL().appendingPathComponent(FileManager.bgFileName)
+                            try? data.write(to: filename)
+                            print("Image Saved")
+                        }
+                        
                     }
             } else {
                 Image(systemName: "hourglass")

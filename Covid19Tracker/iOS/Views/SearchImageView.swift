@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SearchImageView: View {
+    
     @State private var searchText: String = ""
     @State private var searchImages: [SearchImage] = []
     

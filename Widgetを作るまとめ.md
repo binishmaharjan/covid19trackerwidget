@@ -127,7 +127,7 @@ WidgetConfigurationは二種類あります
 
     （注意：新しTimeline取得後、Widgetにすぐに反映されるとは限りません。多少時間かかります。反映されるまでの時間は、ユーザーがどれだけWidgetを見ているかが大きく影響します。）
 
-    ​
+    
 
     timeline()では、Widgetに表示する本当のデータを処理しますので通信などもこちらでやっています。
 
@@ -431,4 +431,21 @@ struct Covid19TrackerWidget_Previews: PreviewProvider {
 }
 ```
 
-#### 
+#### WidgetとアプリでDirectoryやUserDefaultsの共有
+
+Widgetとアプリの間でデータを共有するためはAppGroups機能を利用します。
+
+今２番目のWidget（Covid19GeneralStatsWidget）ではBackgroundないので、アプリでユーザーに画像を検索させ、画像をDirectoryに保存してそれを２番目のWidgetにBackgroundとして利用するようにしたいと思います。
+
+（Human Interface Guidelineとしてはデイザイン的にあまり良くないですが、Directoryの共有の練習のためにやりたいと思います。）
+
+
+
+##### AppGroupsの追加
+
+1. Target  > アプリを選択  >  Signing And Capabilities > +Capability
+2. AppGroupsを追加
+3. AppGroupsから`+`を押してContainerを追加する
+4. Containerにはチュックをついていることを確認する
+5. 同じくTargetsからWidget Extensionでも AppGroupsを追加する。
+6. Widgetではすでに同じ名前のContainerは表示されているのでチュック付けるだけでオッケー
