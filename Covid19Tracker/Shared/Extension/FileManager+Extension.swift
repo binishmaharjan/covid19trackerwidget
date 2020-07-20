@@ -13,9 +13,9 @@ extension FileManager {
         return "bg.png"
     }
     
-  static func sharedContainerURL() -> URL {
-    return FileManager.default.containerURL(
-      forSecurityApplicationGroupIdentifier: "group.com.binish.Covid19Tracker"
-    )!
-  }
+    static func sharedContainerURL() -> URL {
+        return FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: "group.com.binish.Covid19Tracker"
+        )!
+    }
 }

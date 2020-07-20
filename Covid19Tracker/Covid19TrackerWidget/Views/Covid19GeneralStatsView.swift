@@ -11,8 +11,10 @@ import WidgetKit
 struct Covid19GeneralStatsView: View {
     
     var stats: Covid19GeneralStats
+    
+    let sharedContainerURL: URL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.binish.Covid19Tracker")!
     var bgImage: UIImage? {
-        let filePath = FileManager.sharedContainerURL().appendingPathComponent(FileManager.bgFileName)
+        let filePath = sharedContainerURL.appendingPathComponent("bg.png")
         do {
             let data = try Data(contentsOf: filePath)
             let uiimage = UIImage(data: data)
@@ -24,8 +26,10 @@ struct Covid19GeneralStatsView: View {
     
     var body: some View {
         ZStack {
-            Image(uiImage: bgImage!)
-                .resizable()
+            if bgImage != nil {
+                Image(uiImage: bgImage!)
+                    .resizable()
+            }
             
             VStack {
                 TitleView(title: "Covid 19 General Stats",

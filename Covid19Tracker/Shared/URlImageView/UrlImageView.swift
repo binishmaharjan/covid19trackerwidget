@@ -6,9 +6,15 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct UrlImageView: View {
     @ObservedObject var urlImageModel: UrlImageModel
+    @State var showAlert: Bool = false
+    
+    let sharedContainerURL: URL = FileManager.default.containerURL(
+        forSecurityApplicationGroupIdentifier: "group.com.binish.Covid19Tracker"
+    )!
     
     init(urlString: String?) {
         urlImageModel = UrlImageModel(urlString: urlString)
@@ -21,11 +27,11 @@ struct UrlImageView: View {
                     .resizable()
                     .onTapGesture {
                         if let data = uiimage.pngData() {
-                            let filename = FileManager.sharedContainerURL().appendingPathComponent(FileManager.bgFileName)
+                            let filename = sharedContainerURL.appendingPathComponent("bg.png")
                             try? data.write(to: filename)
-                            print("Image Saved")
+                            self.showAlert = true
+                            WidgetCenter.shared.reloadAllTimelines()
                         }
-                        
                     }
             } else {
                 Image(systemName: "hourglass")
@@ -37,6 +43,9 @@ struct UrlImageView: View {
         .clipShape(Rectangle())
         .frame(width: 150, height: 150)
         .overlay(Rectangle().stroke(Color.white,lineWidth:4).shadow(radius: 10))
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Saved"), message: Text("Image Saved"), dismissButton: .default(Text("Ok")))
+        }
         
     }
 }

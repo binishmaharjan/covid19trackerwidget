@@ -416,6 +416,148 @@ struct Covid19WidgetBundle: WidgetBundle {
 
 ![multiplewidget](/Users/maharjanbinish/Desktop/iOS 14 Widgets/multiplewidget.png)
 
+#### Widgetとアプリで情報の共有
+
+Widgetとアプリの間でデータを共有するためはAppGroups機能を利用します。
+
+今２番目のWidget（Covid19GeneralStatsWidget）ではBackgroundないので、アプリでユーザーに画像を検索させ、画像をDirectoryに保存してそれを２番目のWidgetにBackgroundとして利用するようにしたいと思います。
+
+（Human Interface Guidelineとしてはデイザイン的にあまり良くないですが、Directoryの共有の練習のためにやりたいと思います。）
+
+アプリで新しいViewで画像検索機能を追加しました。
+
+![searchimage](/Users/maharjanbinish/Desktop/iOS 14 Widgets/searchimage.png)
+
+
+
+##### AppGroupsの追加
+
+1. Target  > アプリを選択  >  Signing And Capabilities > +Capability
+2. AppGroupsを追加
+3. AppGroupsから`+`を押す
+4. GroupにIdentifierをつけて、Groupを追加する
+5. Groupにはチュックをついていることを確認する
+6. 同じくTargetsからWidget Extensionでも AppGroupsを追加する。
+7. Widgetではすでに同じIdentifierのGroupは表示されているのでチュック付けるだけでオッケー
+
+![appgroups](/Users/maharjanbinish/Desktop/iOS 14 Widgets/appgroups.png)
+
+##### Groupに画像を保存
+
+1. まず、GroupのURL以下のように取得します。画像を表示するUrlImageView.swiftに以下のコードを追加
+
+```swift
+ let sharedContainerURL: URL = FileManager.default.containerURL(
+        forSecurityApplicationGroupIdentifier: "group.com.binish.Covid19Tracker"
+    )!
+```
+
+2. これでDirectoryのURL取得できましたので、Fileを保存できます。今回はImageをタップした時に`bg.png`という名前で保存するようにしてAlertを表示しています。
+
+```swift
+ Image(uiImage: uiimage)
+     .resizable()
+     .onTapGesture {
+       // ファリルに画像を保存
+         if let data = uiimage.pngData() {
+             let filename = sharedContainerURL.appendingPathComponent("bg.png")
+             try? data.write(to: filename)
+             self.showAlert = true
+         }
+         
+     }
+```
+
+![savedalert](/Users/maharjanbinish/Desktop/iOS 14 Widgets/savedalert.png)
+
+##### Groupから画像を読み取り
+
+1.同じGroupのURLを取得します。WidgetのViewを作るCovid19GeneralStatsViewに同じコードを追加sする
+
+```swift
+let sharedContainerURL: URL = FileManager.default.containerURL(
+        forSecurityApplicationGroupIdentifier: "group.com.binish.Covid19Tracker"
+    )!
+```
+
+2. WidgetではURLから`bg.png`を検索し、存在する場合にBackgroundとして設定するようにしています。
+
+```swift
+let sharedContainerURL: URL = FileManager.default.containerURL(
+        forSecurityApplicationGroupIdentifier: "group.com.binish.Covid19Tracker"
+    )!
+
+// ファイルから画像を読みる
+var bgImage: UIImage? {
+    let filePath = sharedContainerURL.appendingPathComponent("bg.png")
+    do {
+        let data = try Data(contentsOf: filePath)
+        let uiimage = UIImage(data: data)
+        return uiimage
+    } catch {
+        return nil
+    }
+}
+
+var body: some View {
+    ZStack {
+      // Background Image設定
+        if bgImage != nil {
+            Image(uiImage: bgImage!)
+                .resizable()
+        }
+。。。省略。。。
+```
+
+これでXcodeでWidgetを実行してみるとBackgroundが設定されて、同じファイルを共有していることが確認できます。
+
+![backgroundset](/Users/maharjanbinish/Desktop/iOS 14 Widgets/backgroundset.png)
+
+##### UserDefaultsの場合
+
+UserDefaultsでデータを共有したい場合は新しく追加された[@AppStorage](https://developer.apple.com/documentation/swiftui/appstorage) Propertyが利用できます。
+
+```swift
+@AppStorage("key", store: UserDefaults(suiteName: "group.com.binish.Covid19Tracker"))
+    var userData: String = ""
+```
+
+#### App-Driven Reloads/WidgetCenter
+
+Widgetを立ち上がった状態でもう一度新しい画像を保存してみましょう。保存が成功してAlertが出てもWidgetのBackgroundが変更されません。
+
+それは、Widgetが５分毎にReloadされるように設定されてBackgroundが反映されるのに次のReloadを待つ必要あります。画像保存後、すぐにBackroundを反映するためにはアプリからWidgetを明示的に更新する（App-Driven Reload）必要があります。
+
+アプリからWidgetを明示的にReloadするために[WidgetCenter](https://developer.apple.com/documentation/widgetkit/widgetcenter)を使用します。
+
+WidgetCenterは
+
+1. [`reloadTimelines(ofKind:)`](https://developer.apple.com/documentation/widgetkit/widgetcenter/reloadtimelines(ofkind:)) : アプリに紐づいている特定のWidgetのみを更新することできます
+2. [`reloadAllTimelines()`](https://developer.apple.com/documentation/widgetkit/widgetcenter/reloadalltimelines()) : 全てのWidgetを更新することができます
+3. [`getCurrentConfigurations(completion:)`](https://developer.apple.com/documentation/widgetkit/widgetcenter/getcurrentconfigurations(_:)) : 現在のConfigurationを取得することできます。
+
+今回は全てのWidgetを更新する`reloadAllTimelines()`で画像保存後、Widgetを更新してみます。
+
+```swift
+Image(uiImage: uiimage)
+     .resizable()
+     .onTapGesture {
+       // ファリルに画像を保存
+         if let data = uiimage.pngData() {
+             let filename = sharedContainerURL.appendingPathComponent("bg.png")
+             try? data.write(to: filename)
+             self.showAlert = true
+           
+           // 全てのWidgetを明示的に更新
+           WidgetCenter.shared.reloadAllTimelines()
+         }
+     }
+```
+
+これでWidget立ち上がった状態でもう一度保存すると、次のReload待たなくてもすぐにBackgroundが反映されるのが確認できます。
+
+（注意：明示的に更新するのは、Widgetに表示する内容に関連する更新が行われた際にのみです。）
+
 #### Preview
 
 CanvasにPreviewの表示するためにはpreviewContext ModifierでWidgetPreviewContextを渡す必要あります。
@@ -431,21 +573,7 @@ struct Covid19TrackerWidget_Previews: PreviewProvider {
 }
 ```
 
-#### WidgetとアプリでDirectoryやUserDefaultsの共有
+****
 
-Widgetとアプリの間でデータを共有するためはAppGroups機能を利用します。
+### 
 
-今２番目のWidget（Covid19GeneralStatsWidget）ではBackgroundないので、アプリでユーザーに画像を検索させ、画像をDirectoryに保存してそれを２番目のWidgetにBackgroundとして利用するようにしたいと思います。
-
-（Human Interface Guidelineとしてはデイザイン的にあまり良くないですが、Directoryの共有の練習のためにやりたいと思います。）
-
-
-
-##### AppGroupsの追加
-
-1. Target  > アプリを選択  >  Signing And Capabilities > +Capability
-2. AppGroupsを追加
-3. AppGroupsから`+`を押してContainerを追加する
-4. Containerにはチュックをついていることを確認する
-5. 同じくTargetsからWidget Extensionでも AppGroupsを追加する。
-6. Widgetではすでに同じ名前のContainerは表示されているのでチュック付けるだけでオッケー
